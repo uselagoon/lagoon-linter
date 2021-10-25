@@ -2,9 +2,17 @@ package main
 
 import "github.com/alecthomas/kong"
 
+var (
+	date        string
+	goVersion   string
+	shortCommit string
+	version     string
+)
+
 // CLI represents the command-line interface.
 type CLI struct {
 	Validate ValidateCmd `kong:"cmd,default=1,help='(default) Validate the Lagoon YAML'"`
+	Version  VersionCmd  `kong:"cmd,help='Print version information'"`
 }
 
 func main() {
