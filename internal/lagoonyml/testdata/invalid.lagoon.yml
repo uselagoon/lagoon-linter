@@ -1,0 +1,18 @@
+environments:
+  main:
+    monitoring_urls:
+    - "https://www.example.com"
+    - "https://www.example.com/special_page"
+    routes:
+    - nginx:
+      - example.com
+      - "www.example.com":
+          tls-acme: 'true'
+          insecure: Redirect
+          hsts: max-age=31536000
+      - "example.com":
+          annotations:
+            nginx.ingress.kubernetes.io/server-snippet: |
+              if ($request_uri !~ \"^/abc\") {
+                return 301 https://dev.example.com$request_uri;
+              }
