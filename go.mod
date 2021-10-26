@@ -1,4 +1,4 @@
-module github.com/amazeeio/lagoon-linter
+module github.com/uselagoon/lagoon-linter
 
 go 1.17
 

@@ -3,7 +3,7 @@ package lagoonyml_test
 import (
 	"testing"
 
-	"github.com/amazeeio/lagoon-linter/internal/lagoonyml"
+	"github.com/uselagoon/lagoon-linter/internal/lagoonyml"
 )
 
 func TestLint(t *testing.T) {

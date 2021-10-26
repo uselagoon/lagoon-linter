@@ -1,6 +1,6 @@
 package main
 
-import "github.com/amazeeio/lagoon-linter/internal/lagoonyml"
+import "github.com/uselagoon/lagoon-linter/internal/lagoonyml"
 
 // ValidateCmd represents the validate command.
 type ValidateCmd struct {
