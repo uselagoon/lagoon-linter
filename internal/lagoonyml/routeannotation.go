@@ -18,8 +18,9 @@ const (
 // annotations.
 var validSnippets = regexp.MustCompile(
 	`^(rewrite +[^; ]+ +[^; ]+( (last|break|redirect|permanent))?;|` +
-		`add_header +[^; ]+ +[^;]+;|` +
+		`add_header +([^; ]+|"[^"]+")+ +([^; ]+|"[^"]+");|` +
 		`set_real_ip_from +[^; ]+;|` +
+		`more_set_headers +(-s +"[^"]+"|-t +"[^"]+"|"[^"]+")+;|` +
 		` )+$`)
 
 // validate returns true if the annotations are valid, and false otherwise.

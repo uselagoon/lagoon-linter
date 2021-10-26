@@ -41,8 +41,12 @@ func TestServerSnippet(t *testing.T) {
 			input: "add_header X-Robots-Tag \"noindex, nofollow\"; add_header X-Robots-Tag \"noindex, nofollow\";",
 			valid: true,
 		},
-		"invalid more_set_header": {
+		"valid more_set_headers": {
 			input: "more_set_headers \"Strict-Transport-Security: max-age=31536000\";\n",
+			valid: true,
+		},
+		"invalid more_set_input_headers": {
+			input: "more_set_input_headers \"X-Foo: bar\";\n",
 			valid: false,
 		},
 		"valid set_real_ip_from": {
