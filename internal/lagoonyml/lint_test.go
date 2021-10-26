@@ -11,8 +11,12 @@ func TestLint(t *testing.T) {
 		input string
 		valid bool
 	}{
-		"valid .lagoon.yml": {
-			input: "testdata/valid.lagoon.yml",
+		"valid.0.lagoon.yml": {
+			input: "testdata/valid.0.lagoon.yml",
+			valid: true,
+		},
+		"valid.1.lagoon.yml": {
+			input: "testdata/valid.1.lagoon.yml",
 			valid: true,
 		},
 		"invalid.0.lagoon.yml": {

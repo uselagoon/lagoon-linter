@@ -14,10 +14,13 @@ const (
 )
 
 // validSnippets is the allow-list of snippets that Lagoon will accept.
-var validServerSnippets = regexp.MustCompile(
+// Currently these are only valid in server-snippet and configuration-snippet
+// annotations.
+var validSnippets = regexp.MustCompile(
 	`^(rewrite +[^; ]+ +[^; ]+( (last|break|redirect|permanent))?;|` +
-		`add_header +[^; ]+ +[^;]+;|` +
+		`add_header +([^; ]+|"[^"]+")+ +([^; ]+|"[^"]+");|` +
 		`set_real_ip_from +[^; ]+;|` +
+		`more_set_headers +(-s +"[^"]+"|-t +"[^"]+"|"[^"]+")+;|` +
 		` )+$`)
 
 // validate returns true if the annotations are valid, and false otherwise.
@@ -50,11 +53,11 @@ func RouteAnnotation() Linter {
 									"this annotation is restricted")
 							}
 							// configuration-snippet
-							if _, ok := ingress.Annotations[configurationSnippet]; ok {
+							if annotation, ok := validate(ingress.Annotations, validSnippets,
+								configurationSnippet); !ok {
 								return fmt.Errorf(
 									"invalid %s annotation on environment %s, route %s, ingress %s: %s",
-									configurationSnippet, eName, rName, iName,
-									"this annotation is restricted")
+									configurationSnippet, eName, rName, iName, annotation)
 							}
 							// modsecurity-snippet
 							if _, ok := ingress.Annotations[modsecuritySnippet]; ok {
@@ -64,8 +67,8 @@ func RouteAnnotation() Linter {
 									"this annotation is restricted")
 							}
 							// server-snippet
-							if annotation, ok := validate(ingress.Annotations,
-								validServerSnippets, serverSnippet); !ok {
+							if annotation, ok := validate(ingress.Annotations, validSnippets,
+								serverSnippet); !ok {
 								return fmt.Errorf(
 									"invalid %s annotation on environment %s, route %s, ingress %s: %s",
 									serverSnippet, eName, rName, iName, annotation)

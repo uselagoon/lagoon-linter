@@ -41,8 +41,12 @@ func TestServerSnippet(t *testing.T) {
 			input: "add_header X-Robots-Tag \"noindex, nofollow\"; add_header X-Robots-Tag \"noindex, nofollow\";",
 			valid: true,
 		},
-		"invalid more_set_header": {
+		"valid more_set_headers": {
 			input: "more_set_headers \"Strict-Transport-Security: max-age=31536000\";\n",
+			valid: true,
+		},
+		"invalid more_set_input_headers": {
+			input: "more_set_input_headers \"X-Foo: bar\";\n",
 			valid: false,
 		},
 		"valid set_real_ip_from": {
@@ -56,17 +60,19 @@ func TestServerSnippet(t *testing.T) {
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
-			l := Lagoon{
-				Environments: map[string]Environment{
-					"testenv": {
-						Routes: []map[string][]LagoonRoute{
-							{
-								"nginx": {
-									{
-										Ingresses: map[string]Ingress{
-											"www.example.com": {
-												Annotations: map[string]string{
-													serverSnippet: tc.input,
+			for _, snippet := range []string{serverSnippet, configurationSnippet} {
+				l := Lagoon{
+					Environments: map[string]Environment{
+						"testenv": {
+							Routes: []map[string][]LagoonRoute{
+								{
+									"nginx": {
+										{
+											Ingresses: map[string]Ingress{
+												"www.example.com": {
+													Annotations: map[string]string{
+														snippet: tc.input,
+													},
 												},
 											},
 										},
@@ -75,16 +81,16 @@ func TestServerSnippet(t *testing.T) {
 							},
 						},
 					},
-				},
-			}
-			err := RouteAnnotation()(&l)
-			if tc.valid {
-				if err != nil {
-					tt.Fatalf("unexpected error %v", err)
 				}
-			} else {
-				if err == nil {
-					tt.Fatalf("expected error, but got nil")
+				err := RouteAnnotation()(&l)
+				if tc.valid {
+					if err != nil {
+						tt.Fatalf("unexpected error %v", err)
+					}
+				} else {
+					if err == nil {
+						tt.Fatalf("expected error, but got nil")
+					}
 				}
 			}
 		})

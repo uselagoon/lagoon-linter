@@ -16,4 +16,3 @@ environments:
               rewrite ^/redirect-test(.*) https://www.example.com/redirect-test$1 permanent;
             nginx.ingress.kubernetes.io/configuration-snippet: |
               more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains";
-              more_clear_headers "Cache-Control";
