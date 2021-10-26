@@ -1,0 +1,18 @@
+environments:
+  main:
+    monitoring_urls:
+    - "https://www.example.com"
+    - "https://www.example.com/special_page"
+    routes:
+    - nginx:
+      - example.com
+      - "www.example.com":
+          tls-acme: 'true'
+          insecure: Redirect
+          hsts: max-age=31536000
+      - "example.com":
+          annotations:
+            nginx.ingress.kubernetes.io/server-snippet: |
+              rewrite ^/redirect-test(.*) https://www.example.com/redirect-test$1 permanent;
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+              more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains";
