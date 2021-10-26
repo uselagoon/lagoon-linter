@@ -56,17 +56,19 @@ func TestServerSnippet(t *testing.T) {
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
-			l := Lagoon{
-				Environments: map[string]Environment{
-					"testenv": {
-						Routes: []map[string][]LagoonRoute{
-							{
-								"nginx": {
-									{
-										Ingresses: map[string]Ingress{
-											"www.example.com": {
-												Annotations: map[string]string{
-													serverSnippet: tc.input,
+			for _, snippet := range []string{serverSnippet, configurationSnippet} {
+				l := Lagoon{
+					Environments: map[string]Environment{
+						"testenv": {
+							Routes: []map[string][]LagoonRoute{
+								{
+									"nginx": {
+										{
+											Ingresses: map[string]Ingress{
+												"www.example.com": {
+													Annotations: map[string]string{
+														snippet: tc.input,
+													},
 												},
 											},
 										},
@@ -75,16 +77,16 @@ func TestServerSnippet(t *testing.T) {
 							},
 						},
 					},
-				},
-			}
-			err := RouteAnnotation()(&l)
-			if tc.valid {
-				if err != nil {
-					tt.Fatalf("unexpected error %v", err)
 				}
-			} else {
-				if err == nil {
-					tt.Fatalf("expected error, but got nil")
+				err := RouteAnnotation()(&l)
+				if tc.valid {
+					if err != nil {
+						tt.Fatalf("unexpected error %v", err)
+					}
+				} else {
+					if err == nil {
+						tt.Fatalf("expected error, but got nil")
+					}
 				}
 			}
 		})
