@@ -39,8 +39,12 @@ func TestRouteAnnotation(t *testing.T) {
 			input: "add_header X-branch \"#main\";\n",
 			valid: true,
 		},
-		"invalid double add_header": {
+		"valid double add_header": {
 			input: "add_header X-Robots-Tag \"noindex, nofollow\"; add_header X-Robots-Tag \"noindex, nofollow\";",
+			valid: true,
+		},
+		"invalid more_set_header": {
+			input: "more_set_headers \"Strict-Transport-Security: max-age=31536000\";\n",
 			valid: false,
 		},
 		"valid set_real_ip_from": {
