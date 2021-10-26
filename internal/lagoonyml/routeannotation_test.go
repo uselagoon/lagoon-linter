@@ -1,12 +1,10 @@
-package lagoonyml_test
+package lagoonyml
 
 import (
 	"testing"
-
-	"github.com/amazeeio/lagoon-linter/internal/lagoonyml"
 )
 
-func TestRouteAnnotation(t *testing.T) {
+func TestServerSnippet(t *testing.T) {
 	var testCases = map[string]struct {
 		input string
 		valid bool
@@ -39,8 +37,12 @@ func TestRouteAnnotation(t *testing.T) {
 			input: "add_header X-branch \"#main\";\n",
 			valid: true,
 		},
-		"invalid double add_header": {
+		"valid double add_header": {
 			input: "add_header X-Robots-Tag \"noindex, nofollow\"; add_header X-Robots-Tag \"noindex, nofollow\";",
+			valid: true,
+		},
+		"invalid more_set_header": {
+			input: "more_set_headers \"Strict-Transport-Security: max-age=31536000\";\n",
 			valid: false,
 		},
 		"valid set_real_ip_from": {
@@ -54,17 +56,17 @@ func TestRouteAnnotation(t *testing.T) {
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
-			l := lagoonyml.Lagoon{
-				Environments: map[string]lagoonyml.Environment{
+			l := Lagoon{
+				Environments: map[string]Environment{
 					"testenv": {
-						Routes: []map[string][]lagoonyml.LagoonRoute{
+						Routes: []map[string][]LagoonRoute{
 							{
 								"nginx": {
 									{
-										Ingresses: map[string]lagoonyml.Ingress{
+										Ingresses: map[string]Ingress{
 											"www.example.com": {
 												Annotations: map[string]string{
-													lagoonyml.ServerSnippet: tc.input,
+													serverSnippet: tc.input,
 												},
 											},
 										},
@@ -75,7 +77,66 @@ func TestRouteAnnotation(t *testing.T) {
 					},
 				},
 			}
-			err := lagoonyml.RouteAnnotation()(&l)
+			err := RouteAnnotation()(&l)
+			if tc.valid {
+				if err != nil {
+					tt.Fatalf("unexpected error %v", err)
+				}
+			} else {
+				if err == nil {
+					tt.Fatalf("expected error, but got nil")
+				}
+			}
+		})
+	}
+}
+
+func TestRestrictedSnippets(t *testing.T) {
+	var testCases = map[string]struct {
+		input string
+		valid bool
+	}{
+		"restrict configuration-snippet": {
+			input: "nginx.ingress.kubernetes.io/configuration-snippet",
+			valid: false,
+		},
+		"restrict modsecurity-snippet": {
+			input: "nginx.ingress.kubernetes.io/modsecurity-snippet",
+			valid: false,
+		},
+		"restrict auth-snippet": {
+			input: "nginx.ingress.kubernetes.io/auth-snippet",
+			valid: false,
+		},
+		"allow whitelist-source-range": {
+			input: "nginx.ingress.kubernetes.io/whitelist-source-range",
+			valid: true,
+		},
+	}
+	for name, tc := range testCases {
+		t.Run(name, func(tt *testing.T) {
+			l := Lagoon{
+				Environments: map[string]Environment{
+					"testenv": {
+						Routes: []map[string][]LagoonRoute{
+							{
+								"nginx": {
+									{
+										Ingresses: map[string]Ingress{
+											"www.example.com": {
+												Annotations: map[string]string{
+													tc.input: "any value",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			}
+			err := RouteAnnotation()(&l)
 			if tc.valid {
 				if err != nil {
 					tt.Fatalf("unexpected error %v", err)

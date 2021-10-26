@@ -1,6 +1,6 @@
 package main
 
-import "github.com/amazeeio/lagoon-linter/internal/lagoonyml"
+import "github.com/uselagoon/lagoon-linter/internal/lagoonyml"
 
 // ValidateCmd represents the validate command.
 type ValidateCmd struct {
@@ -9,5 +9,5 @@ type ValidateCmd struct {
 
 // Run the validation of the Lagoon YAML.
 func (cmd *ValidateCmd) Run() error {
-	return lagoonyml.Lint(`.lagoon.yml`, lagoonyml.RouteAnnotation())
+	return lagoonyml.Lint(cmd.LagoonYAML, lagoonyml.RouteAnnotation())
 }

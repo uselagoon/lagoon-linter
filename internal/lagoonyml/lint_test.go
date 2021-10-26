@@ -3,7 +3,7 @@ package lagoonyml_test
 import (
 	"testing"
 
-	"github.com/amazeeio/lagoon-linter/internal/lagoonyml"
+	"github.com/uselagoon/lagoon-linter/internal/lagoonyml"
 )
 
 func TestLint(t *testing.T) {
@@ -15,8 +15,12 @@ func TestLint(t *testing.T) {
 			input: "testdata/valid.lagoon.yml",
 			valid: true,
 		},
-		"invalid .lagoon.yml": {
-			input: "testdata/invalid.lagoon.yml",
+		"invalid.0.lagoon.yml": {
+			input: "testdata/invalid.0.lagoon.yml",
+			valid: false,
+		},
+		"invalid.1.lagoon.yml": {
+			input: "testdata/invalid.1.lagoon.yml",
 			valid: false,
 		},
 	}

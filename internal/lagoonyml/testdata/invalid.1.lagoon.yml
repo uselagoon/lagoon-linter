@@ -13,9 +13,6 @@ environments:
       - "example.com":
           annotations:
             nginx.ingress.kubernetes.io/server-snippet: |
-              set_real_ip_from 1.2.3.4/32;
-      - "dev.example.com":
-          annotations:
-            nginx.ingress.kubernetes.io/server-snippet: |
-              set_real_ip_from 1.2.3.4/32;
-              add_header Content-type text/plain;
+              rewrite ^/redirect-test(.*) https://www.example.com/redirect-test$1 permanent;
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+              more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains";
