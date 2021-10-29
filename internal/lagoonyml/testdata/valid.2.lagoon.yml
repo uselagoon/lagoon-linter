@@ -1,0 +1,9 @@
+# tls-acme boolean value
+environments:
+  main:
+    monitoring_urls:
+    - "https://www.example.com"
+    routes:
+    - nginx:
+      - "www.example.com":
+          tls-acme: true

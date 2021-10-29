@@ -19,6 +19,14 @@ func TestLint(t *testing.T) {
 			input: "testdata/valid.1.lagoon.yml",
 			valid: true,
 		},
+		"tls-acme boolean": {
+			input: "testdata/valid.2.lagoon.yml",
+			valid: true,
+		},
+		"complete .lagoon.yml": {
+			input: "testdata/valid.3.lagoon.yml",
+			valid: true,
+		},
 		"invalid.0.lagoon.yml": {
 			input: "testdata/invalid.0.lagoon.yml",
 			valid: false,

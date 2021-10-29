@@ -1,0 +1,73 @@
+# more complete valid .lagoon.yml
+docker-compose-yaml: example-docker-compose.yml
+
+tasks:
+  post-rollout:
+    - run:
+        name: Post-rollout script
+        command: /app/scripts/post-rollout.sh
+        service: cli
+
+production_routes:
+  active:
+    routes:
+      - nginx:
+          - "www.example.com":
+              tls-acme: true
+              insecure: Redirect
+          - "de.example.com":
+              tls-acme: "true"
+              insecure: Redirect
+
+  standby:
+    routes:
+      - nginx:
+          - "www.standby.example.com":
+              tls-acme: "false"
+              insecure: Redirect
+          - "de.standby.example.com":
+              tls-acme: "false"
+              insecure: Redirect
+
+routes:
+  autogenerate:
+    prefixes:
+      - www
+      - de
+
+environments:
+  production-green:
+    cronjobs:
+      - name: drush cron
+        schedule: "22 * * * *"
+        command: drush --root=/app/docroot cron
+        service: cli
+  production-blue:
+    cronjobs:
+      - name: drush cron
+        schedule: "22 * * * *"
+        command: drush --root=/app/docroot cron
+        service: cli
+  staging:
+    cronjobs:
+      - name: drush cron
+        schedule: "34 * * * *"
+        command: drush cron
+        service: cli
+    routes:
+      - nginx:
+          - "www.test.example.com":
+              tls-acme: false
+              insecure: Redirect
+          - "de.test.example.com":
+              tls-acme: "false"
+              insecure: Redirect
+  develop:
+    routes:
+      - nginx:
+          - "www.dev.example.com":
+              tls-acme: "false"
+              insecure: Redirect
+          - "de.dev.example.com":
+              tls-acme: false
+              insecure: Redirect

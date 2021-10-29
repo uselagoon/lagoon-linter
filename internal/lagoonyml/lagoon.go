@@ -4,9 +4,6 @@ import "encoding/json"
 
 // Ingress represents a Lagoon route.
 type Ingress struct {
-	TLSACME     string            `json:"tls-acme"`
-	Insecure    string            `json:"insecure"`
-	HSTS        string            `json:"hsts"`
 	Annotations map[string]string `json:"annotations"`
 }
 
