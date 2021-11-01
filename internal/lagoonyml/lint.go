@@ -27,7 +27,7 @@ func Lint(path string, linters ...Linter) error {
 	var li map[string]interface{}
 	err = yaml.Unmarshal(rawYAML, &li)
 	if err != nil {
-		return fmt.Errorf("couldn't unmarshal %v: %v", path, err)
+		return fmt.Errorf(".lagoon.yml configuration not valid for %v: %v", path, err)
 	}
 
 	// check each block for ability to be unmarshalled
@@ -40,7 +40,7 @@ func Lint(path string, linters ...Linter) error {
 					var le Environment
 					err = yaml.Unmarshal(c, &le)
 					if err != nil {
-						fmt.Printf("Warning: Not valid configuration for environment '%s': %v\n", env, err)
+						fmt.Printf("Warning: .lagoon.yml configuration not valid for environment '%s': %v\n", env, err)
 					}
 					l.Environments[env] = le
 				}
@@ -50,7 +50,7 @@ func Lint(path string, linters ...Linter) error {
 					var le Environment
 					err = yaml.Unmarshal(c, &le)
 					if err != nil {
-						fmt.Printf("Warning: Not valid configuration for production_routes '%s': %v\n", env, err)
+						fmt.Printf("Warning: .lagoon.yml configuration not valid for production_routes '%s': %v\n", env, err)
 					}
 					if env == "active" {
 						l.ProductionRoutes.Active = le
