@@ -9,5 +9,5 @@ type ValidateCmd struct {
 
 // Run the validation of the Lagoon YAML.
 func (cmd *ValidateCmd) Run() error {
-	return lagoonyml.Lint(cmd.LagoonYAML, lagoonyml.RouteAnnotation())
+	return lagoonyml.LintFile(cmd.LagoonYAML, lagoonyml.RouteAnnotation())
 }

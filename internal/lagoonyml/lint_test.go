@@ -46,7 +46,7 @@ func TestLint(t *testing.T) {
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
-			err := lagoonyml.Lint(tc.input, lagoonyml.RouteAnnotation())
+			err := lagoonyml.LintFile(tc.input, lagoonyml.RouteAnnotation())
 			if tc.valid {
 				if err != nil {
 					tt.Fatalf("unexpected error %v", err)
