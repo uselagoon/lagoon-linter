@@ -31,6 +31,10 @@ func TestLint(t *testing.T) {
 			input: "testdata/valid.4.lagoon.yml",
 			valid: true,
 		},
+		"add_header ... always": {
+			input: "testdata/valid.5.lagoon.yml",
+			valid: true,
+		},
 		"invalid.0.lagoon.yml": {
 			input: "testdata/invalid.0.lagoon.yml",
 			valid: false,
