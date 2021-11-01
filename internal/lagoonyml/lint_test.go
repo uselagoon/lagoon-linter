@@ -43,6 +43,10 @@ func TestLint(t *testing.T) {
 			input: "testdata/invalid.1.lagoon.yml",
 			valid: false,
 		},
+		"valid.broken.0.lagoon.yml": {
+			input: "testdata/valid.broken.0.lagoon.yml",
+			valid: true,
+		},
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
