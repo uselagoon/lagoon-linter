@@ -78,6 +78,78 @@ func RouteAnnotation() Linter {
 				}
 			}
 		}
+		for _, routeMap := range l.ProductionRoutes.Active.Routes {
+			for rName, lagoonRoutes := range routeMap {
+				for _, lagoonRoute := range lagoonRoutes {
+					for iName, ingress := range lagoonRoute.Ingresses {
+						// auth-snippet
+						if _, ok := ingress.Annotations[authSnippet]; ok {
+							return fmt.Errorf(
+								"invalid %s annotation on active environment, route %s, ingress %s: %s",
+								authSnippet, rName, iName,
+								"this annotation is restricted")
+						}
+						// configuration-snippet
+						if annotation, ok := validate(ingress.Annotations, validSnippets,
+							configurationSnippet); !ok {
+							return fmt.Errorf(
+								"invalid %s annotation on active environment, route %s, ingress %s: %s",
+								configurationSnippet, rName, iName, annotation)
+						}
+						// modsecurity-snippet
+						if _, ok := ingress.Annotations[modsecuritySnippet]; ok {
+							return fmt.Errorf(
+								"invalid %s annotation on active environment, route %s, ingress %s: %s",
+								modsecuritySnippet, rName, iName,
+								"this annotation is restricted")
+						}
+						// server-snippet
+						if annotation, ok := validate(ingress.Annotations, validSnippets,
+							serverSnippet); !ok {
+							return fmt.Errorf(
+								"invalid %s annotation on active environment, route %s, ingress %s: %s",
+								serverSnippet, rName, iName, annotation)
+						}
+					}
+				}
+			}
+		}
+		for _, routeMap := range l.ProductionRoutes.Standby.Routes {
+			for rName, lagoonRoutes := range routeMap {
+				for _, lagoonRoute := range lagoonRoutes {
+					for iName, ingress := range lagoonRoute.Ingresses {
+						// auth-snippet
+						if _, ok := ingress.Annotations[authSnippet]; ok {
+							return fmt.Errorf(
+								"invalid %s annotation on standby environment, route %s, ingress %s: %s",
+								authSnippet, rName, iName,
+								"this annotation is restricted")
+						}
+						// configuration-snippet
+						if annotation, ok := validate(ingress.Annotations, validSnippets,
+							configurationSnippet); !ok {
+							return fmt.Errorf(
+								"invalid %s annotation on standby environment, route %s, ingress %s: %s",
+								configurationSnippet, rName, iName, annotation)
+						}
+						// modsecurity-snippet
+						if _, ok := ingress.Annotations[modsecuritySnippet]; ok {
+							return fmt.Errorf(
+								"invalid %s annotation on standby environment, route %s, ingress %s: %s",
+								modsecuritySnippet, rName, iName,
+								"this annotation is restricted")
+						}
+						// server-snippet
+						if annotation, ok := validate(ingress.Annotations, validSnippets,
+							serverSnippet); !ok {
+							return fmt.Errorf(
+								"invalid %s annotation on standby environment, route %s, ingress %s: %s",
+								serverSnippet, rName, iName, annotation)
+						}
+					}
+				}
+			}
+		}
 		return nil
 	}
 }

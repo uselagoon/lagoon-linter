@@ -29,5 +29,12 @@ type Environment struct {
 
 // Lagoon represents the .lagoon.yml file.
 type Lagoon struct {
-	Environments map[string]Environment `json:"environments"`
+	ProductionRoutes ProductionRoutes       `json:"production_routes"`
+	Environments     map[string]Environment `json:"environments"`
+}
+
+// ProductionRoutes represents active/standby route configurations.
+type ProductionRoutes struct {
+	Active  Environment `json:"active"`
+	Standby Environment `json:"standby"`
 }

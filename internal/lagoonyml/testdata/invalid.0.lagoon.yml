@@ -16,3 +16,22 @@ environments:
               if ($request_uri !~ \"^/abc\") {
                 return 301 https://dev.example.com$request_uri;
               }
+
+production_routes:
+  active:
+    routes:
+      - nginx:
+          - "www.example.com":
+              tls-acme: true
+              insecure: Redirect
+              annotations:
+                nginx.ingress.kubernetes.io/server-snippet: |
+                  if ($request_uri !~ \"^/abc\") {
+                    return 301 https://dev.example.com$request_uri;
+                  }
+  standby:
+    routes:
+      - nginx:
+          - "www.standby.example.com":
+              tls-acme: "false"
+              insecure: Redirect
