@@ -1,0 +1,31 @@
+production_routes:
+  active:
+    routes:
+      - nginx:
+          - "www.example.com":
+              tls-acme: true
+              insecure: Redirect
+          - "de.example.com":
+              tls-acme: "true"
+              insecure: Redirect
+              annotations:
+                nginx.ingress.kubernetes.io/server-snippet: |
+                    set $agentflag 0;
+
+                    if ($http_user_agent ~* "(Mobile)" ){
+                      set $agentflag 1;
+                    }
+
+                    if ( $agentflag = 1 ) {
+                      return 301 https://m.example.com;
+                    }
+
+  standby:
+    routes:
+      - nginx:
+          - "www.standby.example.com":
+              tls-acme: "false"
+              insecure: Redirect
+          - "de.standby.example.com":
+              tls-acme: "false"
+              insecure: Redirect

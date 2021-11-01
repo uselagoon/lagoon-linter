@@ -35,12 +35,24 @@ func TestLint(t *testing.T) {
 			input: "testdata/valid.5.lagoon.yml",
 			valid: true,
 		},
+		"standby route valid annotation": {
+			input: "testdata/valid.6.lagoon.yml",
+			valid: true,
+		},
 		"invalid.0.lagoon.yml": {
 			input: "testdata/invalid.0.lagoon.yml",
 			valid: false,
 		},
 		"invalid.1.lagoon.yml": {
 			input: "testdata/invalid.1.lagoon.yml",
+			valid: false,
+		},
+		"standby route invalid annotation": {
+			input: "testdata/invalid.2.lagoon.yml",
+			valid: false,
+		},
+		"active route invalid annotation": {
+			input: "testdata/invalid.3.lagoon.yml",
 			valid: false,
 		},
 	}
