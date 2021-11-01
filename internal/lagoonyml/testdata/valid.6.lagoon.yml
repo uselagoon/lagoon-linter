@@ -1,0 +1,25 @@
+production_routes:
+  active:
+    routes:
+      - nginx:
+          - "www.example.com":
+              tls-acme: true
+              insecure: Redirect
+          - "de.example.com":
+              tls-acme: "true"
+              insecure: Redirect
+
+  standby:
+    routes:
+      - nginx:
+          - "www.standby.example.com":
+              tls-acme: "false"
+              insecure: Redirect
+          - "de.standby.example.com":
+              tls-acme: "false"
+              insecure: Redirect
+              annotations:
+                nginx.ingress.kubernetes.io/server-snippet: |
+                  set_real_ip_from 1.2.3.4/32;
+
+                  add_header Content-type text/plain;
