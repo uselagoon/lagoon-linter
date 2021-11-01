@@ -8,4 +8,4 @@ Currently implemented linters.
 
 | Name            | Description                                                                                         |
 | ---             | ---                                                                                                 |
-| RouteAnnotation | Validates the `server-snippets` Lagoon route / kubernetes Ingress annotation against an allow-list. |
+| RouteAnnotation | Validates Lagoon Route / Kubernetes Ingress annotations. |
