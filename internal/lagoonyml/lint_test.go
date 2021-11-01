@@ -55,6 +55,10 @@ func TestLint(t *testing.T) {
 			input: "testdata/invalid.3.lagoon.yml",
 			valid: false,
 		},
+		"cronjob as environment": {
+			input: "testdata/invalid.4.lagoon.yml",
+			valid: false,
+		},
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
