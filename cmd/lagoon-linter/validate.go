@@ -1,6 +1,11 @@
 package main
 
-import "github.com/uselagoon/lagoon-linter/internal/lagoonyml"
+import (
+	"fmt"
+	"os"
+
+	"github.com/uselagoon/lagoon-linter/internal/lagoonyml"
+)
 
 // ValidateCmd represents the validate command.
 type ValidateCmd struct {
@@ -9,5 +14,9 @@ type ValidateCmd struct {
 
 // Run the validation of the Lagoon YAML.
 func (cmd *ValidateCmd) Run() error {
-	return lagoonyml.LintFile(cmd.LagoonYAML, lagoonyml.RouteAnnotation())
+	rawYAML, err := os.ReadFile(cmd.LagoonYAML)
+	if err != nil {
+		return fmt.Errorf("couldn't read %v: %v", cmd.LagoonYAML, err)
+	}
+	return lagoonyml.Lint(rawYAML, lagoonyml.RouteAnnotation())
 }

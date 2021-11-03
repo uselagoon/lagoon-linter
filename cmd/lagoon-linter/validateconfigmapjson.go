@@ -39,7 +39,7 @@ func (cmd *ValidateConfigMapJSONCmd) Run() error {
 	// lint it
 	for _, cm := range cml.ConfigMaps {
 		if lagoonYAML, ok := cm.Data[".lagoon.yml"]; ok {
-			err := lagoonyml.LintYAML([]byte(lagoonYAML),
+			err := lagoonyml.Lint([]byte(lagoonYAML),
 				lagoonyml.RouteAnnotation())
 			if err != nil {
 				fmt.Printf("bad .lagoon.yml: %s: %v\n", cm.Metadata["namespace"], err)

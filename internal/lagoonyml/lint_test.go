@@ -1,6 +1,7 @@
 package lagoonyml_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/uselagoon/lagoon-linter/internal/lagoonyml"
@@ -58,7 +59,11 @@ func TestLint(t *testing.T) {
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
-			err := lagoonyml.LintFile(tc.input, lagoonyml.RouteAnnotation())
+			rawYAML, err := os.ReadFile(tc.input)
+			if err != nil {
+				tt.Fatalf("couldn't read %v: %v", tc.input, err)
+			}
+			err = lagoonyml.Lint(rawYAML, lagoonyml.RouteAnnotation())
 			if tc.valid {
 				if err != nil {
 					tt.Fatalf("unexpected error %v", err)
