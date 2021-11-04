@@ -1,4 +1,4 @@
-package lagoonyml
+package required
 
 import (
 	"testing"
@@ -82,7 +82,7 @@ func TestServerSnippet(t *testing.T) {
 						},
 					},
 				}
-				err := RouteAnnotation()(&l)
+				err := RouteAnnotation(&l)
 				if tc.valid {
 					if err != nil {
 						tt.Fatalf("unexpected error %v", err)
@@ -142,7 +142,7 @@ func TestRestrictedSnippets(t *testing.T) {
 					},
 				},
 			}
-			err := RouteAnnotation()(&l)
+			err := RouteAnnotation(&l)
 			if tc.valid {
 				if err != nil {
 					tt.Fatalf("unexpected error %v", err)

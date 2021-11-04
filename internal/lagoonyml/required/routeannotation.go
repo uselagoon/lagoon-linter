@@ -1,4 +1,4 @@
-package lagoonyml
+package required
 
 import (
 	"fmt"
@@ -80,25 +80,23 @@ func validateEnvironment(e *Environment) error {
 }
 
 // RouteAnnotation checks for valid annotations on defined routes.
-func RouteAnnotation() Linter {
-	return func(l *Lagoon) error {
-		for eName, e := range l.Environments {
-			if err := validateEnvironment(&e); err != nil {
-				return fmt.Errorf("environment %s: %v", eName, err)
-			}
+func RouteAnnotation(l *Lagoon) error {
+	for eName, e := range l.Environments {
+		if err := validateEnvironment(&e); err != nil {
+			return fmt.Errorf("environment %s: %v", eName, err)
 		}
-		if l.ProductionRoutes != nil {
-			if l.ProductionRoutes.Active != nil {
-				if err := validateEnvironment(l.ProductionRoutes.Active); err != nil {
-					return fmt.Errorf("active environment: %v", err)
-				}
-			}
-			if l.ProductionRoutes.Standby != nil {
-				if err := validateEnvironment(l.ProductionRoutes.Standby); err != nil {
-					return fmt.Errorf("standby environment: %v", err)
-				}
-			}
-		}
-		return nil
 	}
+	if l.ProductionRoutes != nil {
+		if l.ProductionRoutes.Active != nil {
+			if err := validateEnvironment(l.ProductionRoutes.Active); err != nil {
+				return fmt.Errorf("active environment: %v", err)
+			}
+		}
+		if l.ProductionRoutes.Standby != nil {
+			if err := validateEnvironment(l.ProductionRoutes.Standby); err != nil {
+				return fmt.Errorf("standby environment: %v", err)
+			}
+		}
+	}
+	return nil
 }
