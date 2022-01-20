@@ -16,3 +16,7 @@ environments:
               if ($request_uri !~ \"^/abc\") {
                 return 301 https://dev.example.com$request_uri;
               }
+      - "dev.example.com":
+          annotations:
+            nginx.ingress.kubernetes.io/server-snippet: |
+              real_ip_recursive  on;

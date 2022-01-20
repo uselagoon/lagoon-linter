@@ -20,6 +20,7 @@ var validSnippets = regexp.MustCompile(
 	`^(rewrite +[^; ]+ +[^; ]+( (last|break|redirect|permanent))?;|` +
 		`add_header +([^; ]+|"[^"]+"|'[^']+') +([^; ]+|"[^"]+"|'[^']+')( always)?;|` +
 		`set_real_ip_from +[^; ]+;|` +
+		`real_ip_recursive o(n|ff);|` +
 		`more_set_headers +(-s +("[^"]+"|'[^']+')|-t +("[^"]+"|'[^']+')|("[^"]+"|'[^']+'))+;|` +
 		` )+$`)
 
