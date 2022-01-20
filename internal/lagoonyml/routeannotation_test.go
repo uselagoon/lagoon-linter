@@ -57,6 +57,14 @@ func TestServerSnippet(t *testing.T) {
 			input: "set_real_ip_from 128.128.128.128;\nif (true) { return 301 http://example.com;\n};\n",
 			valid: false,
 		},
+		"valid real_ip_recursive": {
+			input: "real_ip_recursive on;\n",
+			valid: true,
+		},
+		"invalid real_ip_recursive": {
+			input: "real_ip_recursive foo;\n",
+			valid: false,
+		},
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
