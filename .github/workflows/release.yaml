@@ -36,11 +36,7 @@ jobs:
   release:
     needs: tag
     if: needs.tag.outputs.new-tag == 'true'
-    strategy:
-      matrix:
-        os:
-        - ubuntu-latest
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
