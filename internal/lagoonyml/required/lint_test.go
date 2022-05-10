@@ -1,9 +1,10 @@
-package lagoonyml_test
+package required_test
 
 import (
+	"os"
 	"testing"
 
-	"github.com/uselagoon/lagoon-linter/internal/lagoonyml"
+	"github.com/uselagoon/lagoon-linter/internal/lagoonyml/required"
 )
 
 func TestLint(t *testing.T) {
@@ -58,7 +59,11 @@ func TestLint(t *testing.T) {
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {
-			err := lagoonyml.LintFile(tc.input, lagoonyml.RouteAnnotation())
+			rawYAML, err := os.ReadFile(tc.input)
+			if err != nil {
+				tt.Fatalf("couldn't read %v: %v", tc.input, err)
+			}
+			err = required.Lint(rawYAML, required.DefaultLinters())
 			if tc.valid {
 				if err != nil {
 					tt.Fatalf("unexpected error %v", err)
