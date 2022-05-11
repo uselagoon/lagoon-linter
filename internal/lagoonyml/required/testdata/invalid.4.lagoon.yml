@@ -1,0 +1,10 @@
+environments:
+  main:
+    routes:
+    - nginx:
+      - "www.example.com":
+          tls-acme: 'true'
+          insecure: Redirect
+          hsts: max-age=31536000
+          annotations:
+            nginx.ingress.kubernetes.io/use-regex: "true"

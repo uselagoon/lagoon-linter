@@ -56,6 +56,14 @@ func TestLint(t *testing.T) {
 			input: "testdata/invalid.3.lagoon.yml",
 			valid: false,
 		},
+		"use-regex": {
+			input: "testdata/invalid.4.lagoon.yml",
+			valid: false,
+		},
+		"stream-snippet": {
+			input: "testdata/invalid.5.lagoon.yml",
+			valid: false,
+		},
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(tt *testing.T) {

@@ -11,6 +11,8 @@ const (
 	configurationSnippet = "nginx.ingress.kubernetes.io/configuration-snippet"
 	modsecuritySnippet   = "nginx.ingress.kubernetes.io/modsecurity-snippet"
 	serverSnippet        = "nginx.ingress.kubernetes.io/server-snippet"
+	streamSnippet        = "nginx.ingress.kubernetes.io/stream-snippet"
+	useRegex             = "nginx.ingress.kubernetes.io/use-regex"
 )
 
 // validSnippets is the allow-list of snippets that Lagoon will accept.
@@ -71,6 +73,18 @@ func validateEnvironment(e *Environment) error {
 						return fmt.Errorf(
 							"invalid %s annotation on route %s, ingress %s: %s",
 							serverSnippet, rName, iName, annotation)
+					}
+					// stream-snippet
+					if _, ok := ingress.Annotations[streamSnippet]; ok {
+						return fmt.Errorf(
+							"invalid %s annotation on route %s, ingress %s: %s",
+							streamSnippet, rName, iName, "this annotation is restricted")
+					}
+					// use-regex
+					if _, ok := ingress.Annotations[useRegex]; ok {
+						return fmt.Errorf(
+							"invalid %s annotation on route %s, ingress %s: %s",
+							useRegex, rName, iName, "this annotation is restricted")
 					}
 				}
 			}
