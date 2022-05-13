@@ -27,3 +27,26 @@ Currently implemented linters.
 
 Run `lagoon-linter` in the directory containing your `.lagoon.yml`.
 See `lagoon-linter --help` for options.
+
+### validate-config-map-json
+
+`lagoon-linter validate-config-map-json` allows you to validate a dump of configmaps from an existing kubernetes cluster containing Lagoon environments.
+This is helpful when making changes to the linter where you want to check if it will cause build failures on existing Lagoon environments.
+
+First get a dump of configmaps:
+
+```
+for cluster in abc1 xyz2; do
+  # assuming kconfig switches kubectl contexts
+  kconfig myname-$cluster && kubectl get configmap -Ao json > ~/download/lagoon-yml-audit/amazeeio-$cluster.cm.json;
+done
+```
+
+Then run the linter over them.
+It will automatically detect and validate `.lagoon.yml` configmaps only.
+
+```
+for file in ~/download/lagoon-yml-audit/*.json; do
+  echo $file; ./lagoon-linter validate-config-map-json --config-map-json $file;
+done
+```
