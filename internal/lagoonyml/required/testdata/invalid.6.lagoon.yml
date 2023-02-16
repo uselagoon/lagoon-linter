@@ -1,0 +1,13 @@
+environments:
+  main:
+    cronjobs:
+      - name: multiline cron command
+        schedule: "15 1 * * *"
+        command: |-
+            echo "multiline \
+            cron command"
+        service: cli
+      - name: Some nightly task
+        schedule: '5 2 * * *'
+        command: |
+          /app/scripts/custom_task.sh

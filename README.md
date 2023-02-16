@@ -21,6 +21,7 @@ Currently implemented linters.
 | Name            | Profile    | Description                                                                                                                                                                 |
 | ---             | ---        | ---                                                                                                                                                                         |
 | RouteAnnotation | required   | Validates Lagoon Route / Kubernetes Ingress annotations. See the documentation [here](https://docs.lagoon.sh/using-lagoon-the-basics/lagoon-yml/#restrictions) for details. |
+| Cronjobs        | required   | Validates environment cron jobs. |
 | MonitoringURLs  | deprecated | Checks for the presence of `monitoring_urls`.                                                                                                                               |
 
 ## Usage

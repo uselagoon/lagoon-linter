@@ -12,7 +12,7 @@ type Linter func(*Lagoon) error
 
 // DefaultLinters returns the list of default linters for this profile.
 func DefaultLinters() []Linter {
-	return []Linter{RouteAnnotation}
+	return []Linter{RouteAnnotation, Cronjobs}
 }
 
 // Lint takes a byte slice containing raw YAML and applies `.lagoon.yml` lint
