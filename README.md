@@ -39,7 +39,7 @@ First get a dump of configmaps:
 ```
 for cluster in abc1 xyz2; do
   # assuming kconfig switches kubectl contexts
-  kconfig myname-$cluster && kubectl get configmap -Ao json > ~/download/lagoon-yml-audit/amazeeio-$cluster.cm.json;
+  kconfig myname-$cluster && kubectl get configmap --field-selector metadata.name=lagoon-yaml -Ao json > ~/download/lagoon-yml-audit/amazeeio-$cluster.cm.json;
 done
 ```
 
