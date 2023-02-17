@@ -21,6 +21,7 @@ Currently implemented linters.
 | Name            | Profile    | Description                                                                                                                                                                 |
 | ---             | ---        | ---                                                                                                                                                                         |
 | RouteAnnotation | required   | Validates Lagoon Route / Kubernetes Ingress annotations. See the documentation [here](https://docs.lagoon.sh/using-lagoon-the-basics/lagoon-yml/#restrictions) for details. |
+| Cronjobs        | required   | Validates environment cron jobs. |
 | MonitoringURLs  | deprecated | Checks for the presence of `monitoring_urls`.                                                                                                                               |
 
 ## Usage
@@ -38,7 +39,7 @@ First get a dump of configmaps:
 ```
 for cluster in abc1 xyz2; do
   # assuming kconfig switches kubectl contexts
-  kconfig myname-$cluster && kubectl get configmap -Ao json > ~/download/lagoon-yml-audit/amazeeio-$cluster.cm.json;
+  kconfig myname-$cluster && kubectl get configmap --field-selector metadata.name=lagoon-yaml -Ao json > ~/download/lagoon-yml-audit/amazeeio-$cluster.cm.json;
 done
 ```
 

@@ -22,9 +22,16 @@ func (lr *LagoonRoute) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &lr.Ingresses)
 }
 
+// LagoonCronjob represents a Lagoon cronjob.
+type LagoonCronjob struct {
+	Name    string `json:"name"`
+	Command string `json:"command"`
+}
+
 // Environment represents a Lagoon environment.
 type Environment struct {
-	Routes []map[string][]LagoonRoute `json:"routes"`
+	Routes   []map[string][]LagoonRoute `json:"routes"`
+	Cronjobs []LagoonCronjob            `json:"cronjobs"`
 }
 
 // ProductionRoutes represents an active/standby configuration.

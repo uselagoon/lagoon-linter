@@ -46,7 +46,8 @@ environments:
     cronjobs:
       - name: drush cron
         schedule: "22 * * * *"
-        command: drush --root=/app/docroot cron
+        command: >-
+          drush --root=/app/docroot cron
         service: cli
   staging:
     cronjobs:

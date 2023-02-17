@@ -40,7 +40,11 @@ func (cmd *ValidateConfigMapJSONCmd) Run() error {
 	}
 	// lint it
 	for _, cm := range cml.ConfigMaps {
-		if lagoonYAML, ok := cm.Data[".lagoon.yml"]; ok {
+		if cm.Metadata["name"] != "lagoon-yaml" {
+			continue
+		}
+
+		if lagoonYAML, ok := cm.Data["post-deploy"]; ok {
 			switch cmd.Profile {
 			case "required":
 				err = required.Lint([]byte(lagoonYAML), required.DefaultLinters())
