@@ -14,17 +14,18 @@ type LagoonRoute struct {
 	Ingresses map[string]Ingress
 }
 
-type LagoonCronjob struct {
-	Name    string
-	Command string
-}
-
 // UnmarshalJSON implements json.Unmarshaler.
 func (lr *LagoonRoute) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &lr.Name); err == nil {
 		return nil
 	}
 	return json.Unmarshal(data, &lr.Ingresses)
+}
+
+// LagoonCronjob represents a Lagoon cronjob.
+type LagoonCronjob struct {
+	Name    string `json:"name"`
+	Command string `json:"command"`
 }
 
 // Environment represents a Lagoon environment.

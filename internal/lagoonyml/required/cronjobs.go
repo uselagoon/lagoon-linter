@@ -9,7 +9,7 @@ import (
 // newlines, and nil otherwise.
 func ValidateCronjob(c *LagoonCronjob) error {
 	if strings.Contains(strings.TrimSpace(c.Command), "\n") {
-		return fmt.Errorf("%q",
+		return fmt.Errorf("invalid cronjob, multiline commands are not supported: %q",
 			c.Command)
 	}
 

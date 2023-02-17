@@ -40,19 +40,21 @@ func (cmd *ValidateConfigMapJSONCmd) Run() error {
 	}
 	// lint it
 	for _, cm := range cml.ConfigMaps {
-		if cm.Metadata["name"] == "lagoon-yaml" {
-			if lagoonYAML, ok := cm.Data["post-deploy"]; ok {
-				switch cmd.Profile {
-				case "required":
-					err = required.Lint([]byte(lagoonYAML), required.DefaultLinters())
-				case "deprecated":
-					err = deprecated.Lint([]byte(lagoonYAML), deprecated.DefaultLinters())
-				default:
-					return fmt.Errorf("invalid profile: %v", cmd.Profile)
-				}
-				if err != nil {
-					fmt.Printf("bad .lagoon.yml: %s: %v\n", cm.Metadata["namespace"], err)
-				}
+		if cm.Metadata["name"] != "lagoon-yaml" {
+			continue
+		}
+
+		if lagoonYAML, ok := cm.Data["post-deploy"]; ok {
+			switch cmd.Profile {
+			case "required":
+				err = required.Lint([]byte(lagoonYAML), required.DefaultLinters())
+			case "deprecated":
+				err = deprecated.Lint([]byte(lagoonYAML), deprecated.DefaultLinters())
+			default:
+				return fmt.Errorf("invalid profile: %v", cmd.Profile)
+			}
+			if err != nil {
+				fmt.Printf("bad .lagoon.yml: %s: %v\n", cm.Metadata["namespace"], err)
 			}
 		}
 	}
