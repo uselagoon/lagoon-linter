@@ -1,8 +1,28 @@
+version: 2
 builds:
-- dir: cmd/lagoon-linter
+- id: lagoon-linter
+  binary: lagoon-linter
+  main: ./cmd/lagoon-linter
   ldflags:
   - >
-    -s -w -X main.date={{.Date}} -X "main.goVersion={{.Env.GOVERSION}}"
-    -X main.shortCommit={{.ShortCommit}} -X main.version={{.Version}}
+    -s -w
+    -X "main.commit={{.Commit}}"
+    -X "main.date={{.Date}}"
+    -X "main.projectName={{.ProjectName}}"
+    -X "main.version=v{{.Version}}"
   env:
   - CGO_ENABLED=0
+  goos:
+  - linux
+  - darwin
+  goarch:
+  - amd64
+  - arm64
+
+changelog:
+  use: github-native
+
+release:
+  extra_files:
+  - glob: "{{ .Env.GITHUB_SBOM_PATH }}"
+    name_template: "{{ .ProjectName }}.v{{ .Version }}.sbom.spdx.json"
