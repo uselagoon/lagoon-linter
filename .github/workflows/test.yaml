@@ -1,14 +1,19 @@
-name: Test
-on: pull_request
+name: test
+on:
+  pull_request:
+    branches:
+    - main
+permissions: {}
 jobs:
-  go-test:
+  test-go:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Install Go
-      uses: actions/setup-go@v2
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
-        go-version: "^1.17"
-    - name: Run Tests
-      run: go test -v ./...
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+      with:
+        go-version: stable
+    - run: go test -v ./...
