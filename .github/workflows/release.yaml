@@ -1,57 +1,60 @@
-name: Release
+name: release
 on:
   push:
     branches:
     - main
+permissions: {}
 jobs:
-  tag:
+  release-tag:
+    permissions:
+      # create tag
+      contents: write
     runs-on: ubuntu-latest
     outputs:
-      new-tag: ${{ steps.bump-tag.outputs.new }}
+      new-tag: ${{ steps.ccv.outputs.new-tag }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         fetch-depth: 0
-    - name: Configure Git
-      run: |
-        git config --global user.name "$GITHUB_ACTOR"
-        git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
-    - name: Install Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: "^1.17"
-    - name: Install ccv
-      run: >
-        curl -sSL https://github.com/smlx/ccv/releases/download/v0.3.2/ccv_0.3.2_linux_amd64.tar.gz
-        | sudo tar -xz -C /usr/local/bin ccv
     - name: Bump tag if necessary
-      id: bump-tag
-      run: |
-        if [ -z $(git tag -l $(ccv)) ]; then
-          git tag $(ccv)
-          git push --tags
-          echo "::set-output name=new::true"
-        fi
-  release:
-    needs: tag
-    if: needs.tag.outputs.new-tag == 'true'
+      id: ccv
+      uses: smlx/ccv@d3de774e9b607b079940a7a86952f44643743336 # v0.9.0
+  release-build:
+    permissions:
+      # create release
+      contents: write
+      # push docker images to registry
+      packages: write
+      # required by attest-build-provenance
+      id-token: write
+      attestations: write
+    needs: release-tag
+    if: needs.release-tag.outputs.new-tag == 'true'
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         fetch-depth: 0
-    - name: Install Go
-      uses: actions/setup-go@v2
+    - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
       with:
-        go-version: "^1.17"
-    - name: Set up environment
-      run: echo "GOVERSION=$(go version)" >> $GITHUB_ENV
-    - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@v2
-      with:
-        version: latest
-        args: release --rm-dist
+        go-version: stable
+    - uses: advanced-security/sbom-generator-action@375dee8e6144d9fd0ec1f5667b4f6fb4faacefed # v0.0.1
+      id: sbom
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Move sbom to avoid dirty git
+      run: mv "$GITHUB_SBOM_PATH" ./sbom.spdx.json
+      env:
+        GITHUB_SBOM_PATH: ${{ steps.sbom.outputs.fileName }}
+    - uses: goreleaser/goreleaser-action@286f3b13b1b49da4ac219696163fb8c1c93e1200 # v6.0.0
+      id: goreleaser
+      with:
+        version: latest
+        args: release --clean
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_SBOM_PATH: ./sbom.spdx.json
+    # attest archives
+    - uses: actions/attest-build-provenance@5e9cb68e95676991667494a6a4e59b8a2f13e1d0 # v1.3.3
+      with:
+        subject-path: "dist/*.tar.gz"

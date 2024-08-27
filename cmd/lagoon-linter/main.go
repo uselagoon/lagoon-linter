@@ -4,7 +4,6 @@ import "github.com/alecthomas/kong"
 
 var (
 	date        string
-	goVersion   string
 	shortCommit string
 	version     string
 )

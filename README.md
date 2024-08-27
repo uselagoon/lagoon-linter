@@ -1,5 +1,10 @@
 # Lagoon Linter
 
+[![coverage](https://raw.githubusercontent.com/uselagoon/lagoon-linter/badges/.badges/main/coverage.svg)](https://github.com/uselagoon/lagoon-linter/actions/workflows/coverage.yaml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/uselagoon/lagoon-linter)](https://goreportcard.com/report/github.com/uselagoon/lagoon-linter)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/uselagoon/lagoon-linter/badge)](https://securityscorecards.dev/viewer/?uri=github.com/uselagoon/lagoon-linter)
+ [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9356/badge)](https://www.bestpractices.dev/projects/9356)
+
 Lint `.lagoon.yml` for validity.
 
 ## Profiles
