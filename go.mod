@@ -1,10 +1,10 @@
 module github.com/uselagoon/lagoon-linter
 
-go 1.17
+go 1.23
 
 require (
-	github.com/alecthomas/kong v0.2.17
-	sigs.k8s.io/yaml v1.3.0
+	github.com/alecthomas/kong v1.6.0
+	sigs.k8s.io/yaml v1.4.0
 )
 
 require (
