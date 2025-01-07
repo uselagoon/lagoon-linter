@@ -9,16 +9,16 @@ jobs:
     - name: Install Go
       uses: actions/setup-go@v2
       with:
-        go-version: "^1.17"
+        go-version: "^1.23"
     - name: Set up environment
       run: echo "GOVERSION=$(go version)" >> $GITHUB_ENV
     - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@v2
+      uses: goreleaser/goreleaser-action@v6
       with:
         version: latest
-        args: build --snapshot --rm-dist
+        args: build --snapshot --clean
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: lagoon-linter
         path: dist/*
@@ -29,7 +29,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Download lagoon-linter binaries
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: lagoon-linter
         path: ./dist
