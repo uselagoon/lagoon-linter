@@ -8,7 +8,7 @@ import (
 // ValidateCronjob returns an error if the command for the cronjob has any
 // newlines, and nil otherwise.
 func ValidateCronjob(c *LagoonCronjob) error {
-	if strings.Contains(strings.TrimSpace(c.Command), "\n") {
+	if strings.Contains(strings.TrimSpace(c.Command), "\n") || strings.HasSuffix(c.Command, "\n") {
 		return fmt.Errorf("invalid cronjob, multiline commands are not supported: %q",
 			c.Command)
 	}

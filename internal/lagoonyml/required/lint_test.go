@@ -64,8 +64,16 @@ func TestLint(t *testing.T) {
 			input: "testdata/invalid.5.lagoon.yml",
 			valid: false,
 		},
-		"multiline cronjobs": {
+		"multiline-cronjobs-literal-strip": {
 			input: "testdata/invalid.6.lagoon.yml",
+			valid: false,
+		},
+		"multiline-cronjobs-literal": {
+			input: "testdata/invalid.7.lagoon.yml",
+			valid: false,
+		},
+		"multiline-cronjobs-folded": {
+			input: "testdata/invalid.8.lagoon.yml",
 			valid: false,
 		},
 	}

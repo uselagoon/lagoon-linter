@@ -91,13 +91,6 @@ var singleline = `environments:
         command: |-
           singleline command
 
-      - name: block scalar folded clipped 1
-        command: >
-          singleline
-          command
-      - name: block scalar folded clipped 2
-        command: >
-          singleline command
       - name: block scalar folded stripped 1
         command: >-
           singleline

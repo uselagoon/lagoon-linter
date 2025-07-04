@@ -7,7 +7,3 @@ environments:
             echo "multiline \
             cron command"
         service: cli
-      - name: Some nightly task
-        schedule: '5 2 * * *'
-        command: |
-          /app/scripts/custom_task.sh
